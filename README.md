@@ -68,16 +68,7 @@ module mux4_to_1_gate (
     input wire A,
     input wire B,
     input wire C,
-    input wire D,
-    input wire S0,
-    input wire S1,
-    output wire Y
-);
-    wire not_S0, not_S1;
-    wire A_and, B_and, C_and, D_and;
-
-    // Inverters for select lines
-    not (not_S0, S0);
+    
     not (not_S1, S1);
 
     // AND gates for each input with select lines
