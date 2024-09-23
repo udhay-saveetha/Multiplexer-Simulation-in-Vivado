@@ -41,10 +41,10 @@ input [3:0]a;
 input [1:0]s;
 output out;
 wire [3:0]w;
-and (w[0],in[0],~s[0],~s[1]);
-and (w[1],in[1],~s[0],s[1]);
-and (w[2],in[2],s[0],~s[1]);
-and (w[3],in[3],s[0],s[1]);
+and (w[0],in[0],~s[1],~s[0]);
+and (w[1],in[1],~s[1],s[0]);
+and (w[2],in[2],s[1],~s[0]);
+and (w[3],in[3],s[1],s[0]);
 or (out,w[0],w[1],w[2],w[3]);
 endmodule
 ```
@@ -160,8 +160,7 @@ wire out;
         #2 $stop;
     end
     initial begin
-        $monitor("Time=%0t | S1=%b S0=%b | Inputs: A=%b B=%b C=%b D=%b | Y_gate=%b | Y_dataflow=%b | Y_behavioral=%b | Y_structural=%b",
-                 $time, S1, S0, A, B, C, D, Y_gate, Y_dataflow, Y_behavioral, Y_structural);
+        $monitor("Time=%0t | s[1]=%b s[0]=%b | Inputs: a[0]=%b a[1]=%b a[2]=%b a[3]=%b | out_gate=%b | out_dataflow=%b | out_behavioral=%b | out_structural=%b",$time, s[1], s[0], a[0], a[1], a[2], a[3], out_gate, out_dataflow, out_behavioral, out_structural);
     end
 endmodule
 ```
@@ -170,12 +169,20 @@ endmodule
 **Sample Output**
 
 ```
-Time=0 | S[1]=0 S[0]=0 | Inputs: a[0]=0 a[1]=0 a[2]=0 a[3]=0 | out_gate=0 | Y_dataflow=0 | out_behavioral=0 | out_structural=0
-Time=10 | S[1]=0 S[0]=0 | Inputs: A=0 B=0 C=0 D=0 | Y_gate=0 | out_dataflow=0 | out_behavioral=0 | out_structural=0
-Time=20 | S[1]=0 S[0]=0 | Inputs: A=0 B=0 C=0 D=1 | Y_gate=0 | out_dataflow=0 | out_behavioral=0 | Y_structural=0
-Time=30 | S[1]=0 S[0]=1 | Inputs: A=0 B=0 C=0 D=1 | Y_gate=0 | out_dataflow=0 | out_behavioral=0 | Y_structural=0
-Time=40 | S[1]=1 S[0]=0 | Inputs: A=0 B=0 C=0 D=1 | Y_gate=0 | out_dataflow=0 | out_behavioral=0 | Y_structural=0
+Time=0 | s[1]=0 s[0]=0 | Inputs: a[0]=0 a[1]=0 a[2]=0 a[3]=0 | out_gate=0 | out_dataflow=0 | out_behavioral=0 | out_structural=0
+Time=4000 | s[1]=0 s[0]=0 | Inputs: a[0]=1 a[1]=0 a[2]=0 a[3]=0 | out_gate=1 | out_dataflow=1 | out_behavioral=1 | out_structural=1
+Time=6000 | s[1]=0 s[0]=1 | Inputs: a[0]=0 a[1]=1 a[2]=0 a[3]=0 | out_gate=1 | out_dataflow=1 | out_behavioral=1 | out_structural=1
+Time=8000 | s[1]=1 s[0]=0 | Inputs: a[0]=0 a[1]=0 a[2]=1 a[3]=0 | out_gate=1 | out_dataflow=1 | out_behavioral=1 | out_structural=1
+Time=10000 | s[1]=1 s[0]=1 | Inputs: a[0]=0 a[1]=0 a[2]=0 a[3]=1 | out_gate=1 | out_dataflow=1 | out_behavioral=1 | out_structural=1
+Time=12000 | s[1]=0 s[0]=1 | Inputs: a[0]=0 a[1]=0 a[2]=1 a[3]=1 | out_gate=0 | out_dataflow=0 | out_behavioral=0 | out_structural=0
+Time=14000 | s[1]=1 s[0]=0 | Inputs: a[0]=0 a[1]=1 a[2]=0 a[3]=1 | out_gate=0 | out_dataflow=0 | out_behavioral=0 | out_structural=0
+Time=16000 | s[1]=1 s[0]=1 | Inputs: a[0]=0 a[1]=1 a[2]=1 a[3]=0 | out_gate=0 | out_dataflow=0 | out_behavioral=0 | out_structural=0
+Time=18000 | s[1]=0 s[0]=0 | Inputs: a[0]=1 a[1]=1 a[2]=1 a[3]=1 | out_gate=1 | out_dataflow=1 | out_behavioral=1 | out_structural=1
 ```
+**Output waveform**
+
+![Screenshot 2024-09-23 093500](https://github.com/user-attachments/assets/b2dd6c00-5ae2-4dfd-862e-e832fcc022c2)
+
 
 **Conclusion:**
 
