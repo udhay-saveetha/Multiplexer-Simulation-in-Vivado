@@ -82,18 +82,18 @@ endmodule
 **4:1 MUX Structural Implementation**<br>
 
 ```
-module mux2_to_1 (a,s,out);
-input s,[1:0]a;
+module mux2_to_1 (a,b,s,out);
+input s,a,b;
 output out;
-    assign out = s ? a[1] : a[0];
+    assign out = s ? b : a;
 endmodule
 module mux4_to_1_structural (a,s,out);
 input [3:0]a;
 input [1:0]s;
 output out;
     wire mux_low, mux_high;
-    mux2_to_1 mux0 (.a[0](a[0]), .a[1](a[1]), .s(s[0]), .out(mux_low));
-    mux2_to_1 mux1 (.a[0](a[2]), .a[1](a[3]), .s(s[0]), .out(mux_high));
+    mux2_to_1 mux0 (.a(a[0]), .b(a[1]), .s(s[0]), .out(mux_low));
+    mux2_to_1 mux1 (.a(a[2]), .b(a[3]), .s(s[0]), .out(mux_high));
     mux2_to_1 mux_final (.a[0](mux_low), .a[1](mux_high), .s(s[1]), .out(out));
 endmodule
 ```
@@ -111,39 +111,23 @@ wire out;
     wire out_behavioral;
     wire out_structural;
     mux4_to_1_gate uut_gate (
-        .a[0](a[0]),
-        .a[1](a[1]),
-        .a[2](a[2]),
-        .a[3](a[3]),
-        .s[0](s[0]),
-        .s[1](s[1]),
+        .a(a),
+        .s(s),
         .out(out_gate)
     );
     mux4_to_1_dataflow uut_dataflow (
-        .a[0](a[0]),
-        .a[1](a[1]),
-        .a[2](a[2]),
-        .a[3](a[3]),
-        .s[0](s[0]),
-        .s[1](s[1]),
+        .a(a),
+        .s(s),
         .out(out_dataflow)
     );
     mux_4_1_behavioral uut_behavioral (
-        .a[0](a[0]),
-        .a[1](a[1]),
-        .a[2](a[2]),
-        .a[3](a[3]),
-        .s[0](s[0]),
-        .s[1](s[1]),
+        .a(a),
+        .s(s),
         .out(out_behavioral)
     );
     mux4_to_1_structural uut_structural (
-        .a[0](a[0]),
-        .a[1](a[1]),
-        .a[2](a[2]),
-        .a[3](a[3]),
-        .s[0](s[0]),
-        .s[1](s[1]),
+        .a(a),
+        .s(s),
         .out(out_structural)
     );
     initial begin
